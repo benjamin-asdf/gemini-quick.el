@@ -1,0 +1,20 @@
+* Concept
+
+- I recently used to open LLM chat and paste text a lot.
+- This is for automating this process and get the output in an emacs buffer.
+
+* Usage
+
+- You need to set =gemini-api-key= to a function with no args
+  returning a gemini api key.
+
+  Example:
+
+#+begin_src elisp
+  (setf gemini-api-key
+        (let ((s))
+    (lambda ()
+      (setf s (shell-command-to-string "pass gai/gemini-api-key-1")))))
+#+end_src
+
+- Use =quick-gemini-chat=
