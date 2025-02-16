@@ -16,7 +16,7 @@
   Example:
 
 #+begin_src elisp
-  (setf gemini-api-key
+  (setf gemini-quick-api-key
         (let ((s))
     (lambda ()
       (setf s (shell-command-to-string "pass gai/gemini-api-key-1")))))
@@ -38,7 +38,7 @@
   ;;  '("H" . quick-gemini-chat))
 
   (setf
-   gemini-api-key
+   gemini-quick-api-key
    ;; requires lexical binding enabled (M-x elisp-enable-lexical-binding for this file)
    (let ((s))
      (lambda ()
@@ -49,11 +49,14 @@
              "pass gai/api-key-2")))))))
 #+end_src
 
+- Use *return* inside a markdown code block to select the region,
+  then for example narrow to region and ediff buffers, ad-lib.
+
 * Configuration
 
 - =gemini-model=
 - (there is a list model endpoint, they are also listed [[https://ai.google.dev/gemini-api/docs/models/gemini][here]]).
 
 #+begin_src elisp
-(setf gemini-model "gemini-2.0-flash")
+(setf gemini-quick-model "gemini-2.0-flash")
 #+end_src

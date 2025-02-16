@@ -22,7 +22,7 @@
 (require 'request)
 (require 's)
 
-(defcustom gemini-api-key (lambda () (getenv "GEMINI_API_KEY"))
+(defcustom gemini-quick-api-key (lambda () (getenv "GEMINI_API_KEY"))
   "Function to get API key for gemini, called without arguments.")
 
 ;; (defcustom gemini-output-buffer-function
@@ -34,12 +34,12 @@
   (interactive "P")
   (message "%s" arg))
 
-(defcustom gemini-default-model
+(defcustom gemini-quick-default-model
   "gemini-2.0-flash"
   ;; "gemini-1.5-flash"
   "Default model for gemini chat")
 
-(defvar gemini-model gemini-default-model)
+(defvar gemini-quick-model gemini-quick-default-model)
 
 (define-derived-mode gemini-quick-chat-mode text-mode "Gemini Chat")
 
@@ -52,7 +52,6 @@
  (let ((map (make-sparse-keymap)))
    (keymap-set map "RET" #'gemini-quick-select-markdown-block)
    map))
-
 
 (defun gemini-quick-chat (arg)
   "Send buffer content (or region) to Gemini and display response in '*gemini-output*'.
@@ -85,10 +84,10 @@ If there's an error, error details will also be shown in '*gemini-output*'."
                           (s-trim
                            (shell-command-to-string
                             "date +%s")))))
-         (api-key (funcall gemini-api-key))
+         (api-key (funcall gemini-quick-api-key))
          (url (concat
                "https://generativelanguage.googleapis.com/v1beta/models/"
-               gemini-model
+               gemini-quick-model
                ":generateContent?key="
                api-key)))
     (message
