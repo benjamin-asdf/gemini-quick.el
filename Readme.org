@@ -2,10 +2,15 @@
 
 - I recently used to open LLM chat and paste text a lot.
 - This is for automating this process and get the output in an emacs buffer.
+- Gemini 2.0 is for free at the moment, just go [[https://ai.google.dev/gemini-api/docs/api-key][here]] and get an api key.
 
 * Usage
 
-- You need to set =gemini-api-key= to a function with no args
+- depends on [[https://github.com/tkf/emacs-request][=request=]]
+- Load [[file:gemini-quick.el]]
+
+- By default it reads *GEMINI_API_KEY* env var, else you
+- set =gemini-api-key= to a function with no args
   returning a gemini api key.
 
   Example:
@@ -18,3 +23,37 @@
 #+end_src
 
 - Use =quick-gemini-chat=
+
+** Complete setup example with use-package
+
+#+begin_src elisp
+  (when
+    (use-package request :ensure t)
+  (require
+   'gemini-quick
+   "path/gemini-quick.el/gemini-quick.el")
+
+  ;; define key
+  ;; (meow-leader-define-key
+  ;;  '("H" . quick-gemini-chat))
+
+  (setf
+   gemini-api-key
+   ;; requires lexical binding enabled (M-x elisp-enable-lexical-binding for this file)
+   (let ((s))
+     (lambda ()
+       (or s
+           (setf
+            s
+            (shell-command-to-string
+             "pass gai/api-key-2")))))))
+#+end_src
+
+* Configuration
+
+- =gemini-model=
+- (there is a list model endpoint, they are also listed [[https://ai.google.dev/gemini-api/docs/models/gemini][here]]).
+
+#+begin_src elisp
+(setf gemini-model "gemini-2.0-flash")
+#+end_src
