@@ -131,17 +131,40 @@ If there's an error, error details will also be shown in '*gemini-output*'."
 (defun gemini-quick-select-markdown-block ()
   (interactive)
   (let ((beg (progn
-               (re-search-backward "^```")
+               (re-search-backward "^[[:blank:]]*```")
                (forward-line 1)
                (point)))
         (end (progn
-               (re-search-forward "^```")
+               (re-search-forward "^[[:blank:]]*```")
                (beginning-of-line)
                (point))))
     (save-excursion
       (goto-char beg)
       (set-mark beg)
       (goto-char end))))
+
+(defun gemini-quick-read-string ()
+  (let ((minibuffer-setup-hook (append
+                                (list
+                                 (defun gemini-read-prompt-setup-hook ()
+                                   (insert "lol")
+                                   (add-hook
+                                    'post-self-insert-hook
+                                    (defun gemini-read-prompt-abbrev-hook ()
+                                      (dolist (kv gemini-read-abbrev-table)
+                                        (when (looking-back (car kv))
+                                          (delete-region
+                                           (save-excursion
+                                             (forward-char
+                                              (- (length (car kv))))
+                                             (point))
+                                           (point))
+                                          (insert (cdr kv)))))
+                                    nil
+                                    t)))
+                                minibuffer-setup-hook)))
+    (read-string "Q: ")))
+
 
 (provide 'gemini-quick)
 
