@@ -25,15 +25,6 @@
 (defcustom gemini-quick-api-key (lambda () (getenv "GEMINI_API_KEY"))
   "Function to get API key for gemini, called without arguments.")
 
-;; (defcustom gemini-output-buffer-function
-;;   (lambda ())
-;;   ""
-;;   )
-
-(defun gemini-quick-chat (arg)
-  (interactive "P")
-  (message "%s" arg))
-
 (defcustom gemini-quick-default-model
   "gemini-2.0-flash"
   ;; "gemini-1.5-flash"
@@ -143,11 +134,15 @@ If there's an error, error details will also be shown in '*gemini-output*'."
       (set-mark beg)
       (goto-char end))))
 
+(defcustom gemini-read-abbrev-table
+  '(("ee" . "output valid edn")
+    ("addoc" . "add doc string"))
+  "Abbrev table for gemini read")
+
 (defun gemini-quick-read-string ()
   (let ((minibuffer-setup-hook (append
                                 (list
                                  (defun gemini-read-prompt-setup-hook ()
-                                   (insert "lol")
                                    (add-hook
                                     'post-self-insert-hook
                                     (defun gemini-read-prompt-abbrev-hook ()
@@ -164,7 +159,6 @@ If there's an error, error details will also be shown in '*gemini-output*'."
                                     t)))
                                 minibuffer-setup-hook)))
     (read-string "Q: ")))
-
 
 (provide 'gemini-quick)
 
